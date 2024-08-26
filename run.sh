@@ -36,26 +36,17 @@ mount --bind /dev $MOUNT_POINT/dev
 mount --bind /proc $MOUNT_POINT/proc
 mount --bind /sys $MOUNT_POINT/sys
 
-# Step 3: Switch the Root Filesystem to the RAM Disk
+# Step 3: Switch to the Alpine Environment using chroot
 
-echo "Switching root filesystem to the RAM disk..."
+echo "Switching to the Alpine environment using chroot..."
 
-cd $MOUNT_POINT
+# Ensure the necessary directories exist
+mkdir -p $MOUNT_POINT/old_root
+mkdir -p $MOUNT_POINT/dev
+mkdir -p $MOUNT_POINT/proc
+mkdir -p $MOUNT_POINT/sys
 
-# Prepare new and old root directories
-mkdir -p old_root
-
-pivot_root . old_root
-
-echo "Unmounting old root and other unnecessary filesystems..."
-umount -l /old_root/dev /old_root/proc /old_root/sys || echo "Unmounting failed, continuing..."
-umount -l /old_root || echo "Old root not mounted, continuing..."
-
-echo "Successfully switched to RAM-based environment."
-
-# Step 4: Drop into a shell inside the Alpine environment
+# Move to the Alpine environment
+chroot $MOUNT_POINT /bin/sh
 
 echo "You are now in a shell inside the Alpine environment. You can perform any necessary tasks such as running the 'dd' command manually."
-
-# Start a shell in the Alpine environment
-exec /bin/sh

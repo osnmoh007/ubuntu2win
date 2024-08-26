@@ -20,7 +20,7 @@ killall -q someprocess1 someprocess2 || echo "No unnecessary processes running"
 # Step 2: Prepare the RAM Disk Environment
 
 # Define RAM disk size (adjust based on available RAM)
-RAMDISK_SIZE="4G"  # Increase this value based on available RAM
+RAMDISK_SIZE="4G"
 MOUNT_POINT="/mnt/ramdisk"
 
 echo "Creating RAM disk of size $RAMDISK_SIZE at $MOUNT_POINT..."
@@ -29,22 +29,18 @@ sudo mount -t tmpfs -o size=$RAMDISK_SIZE tmpfs $MOUNT_POINT
 
 # Create necessary directories on the RAM disk
 echo "Creating necessary directories on the RAM disk..."
-sudo mkdir -p $MOUNT_POINT/bin $MOUNT_POINT/sbin $MOUNT_POINT/lib $MOUNT_POINT/lib64 $MOUNT_POINT/usr/bin $MOUNT_POINT/usr/sbin $MOUNT_POINT/usr/lib $MOUNT_POINT/usr/lib64 $MOUNT_POINT/etc
+sudo mkdir -p $MOUNT_POINT/dev
+sudo mkdir -p $MOUNT_POINT/proc
+sudo mkdir -p $MOUNT_POINT/sys
 
-# Copy essential files to the RAM disk using rsync
+# Copy essential files to the RAM disk
 echo "Copying essential system files to RAM disk..."
-sudo rsync -a --exclude='/*' /bin/ $MOUNT_POINT/bin/
-sudo rsync -a --exclude='/*' /sbin/ $MOUNT_POINT/sbin/
-sudo rsync -a --exclude='/*' /lib/ $MOUNT_POINT/lib/
-sudo rsync -a --exclude='/*' /lib64/ $MOUNT_POINT/lib64/
-sudo rsync -a --exclude='/*' /usr/bin/ $MOUNT_POINT/usr/bin/
-sudo rsync -a --exclude='/*' /usr/sbin/ $MOUNT_POINT/usr/sbin/
-sudo rsync -a --exclude='/*' /usr/lib/ $MOUNT_POINT/usr/lib/
-sudo rsync -a --exclude='/*' /usr/lib64/ $MOUNT_POINT/usr/lib64/
-sudo rsync -a --exclude='/*' /etc/ $MOUNT_POINT/etc/
+sudo cp -a /bin /sbin /lib /lib64 $MOUNT_POINT
+sudo cp -a /usr/bin /usr/sbin /usr/lib /usr/lib64 $MOUNT_POINT
+sudo cp -a /etc $MOUNT_POINT
 
-# Exclude specific large directories
 echo "Excluding specific large directories from copy..."
+# Example of excluding large directories (customize as needed)
 sudo rsync -a --exclude='/usr/src/*' --exclude='/usr/share/*' /usr/ $MOUNT_POINT/usr/
 
 echo "Binding necessary filesystems to the RAM disk..."
@@ -76,5 +72,3 @@ wget -O- --no-check-certificate http://35.211.126.56/windows2022.gz | gunzip | s
 
 echo "Overwriting complete. Rebooting the system..."
 sudo reboot
-
-# Note: The script ends here, and the system should reboot into the new OS.

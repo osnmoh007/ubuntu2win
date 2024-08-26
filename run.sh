@@ -44,9 +44,9 @@ echo "Excluding specific large directories from copy..."
 sudo rsync -a --exclude='/usr/src/*' --exclude='/usr/share/*' /usr/ $MOUNT_POINT/usr/
 
 echo "Binding necessary filesystems to the RAM disk..."
-sudo mount --bind /dev $MOUNT_POINT/dev
-sudo mount --bind /proc $MOUNT_POINT/proc
-sudo mount --bind /sys $MOUNT_POINT/sys
+sudo mount --bind /dev $MOUNT_POINT/dev || echo "Failed to bind /dev"
+sudo mount --bind /proc $MOUNT_POINT/proc || echo "Failed to bind /proc"
+sudo mount --bind /sys $MOUNT_POINT/sys || echo "Failed to bind /sys"
 
 # Step 3: Switch the Root Filesystem to the RAM Disk
 

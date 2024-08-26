@@ -33,11 +33,17 @@ sudo mkdir -p $MOUNT_POINT/dev
 sudo mkdir -p $MOUNT_POINT/proc
 sudo mkdir -p $MOUNT_POINT/sys
 
-# Copy essential files to the RAM disk
+# Copy essential files to the RAM disk using rsync
 echo "Copying essential system files to RAM disk..."
-sudo cp -a /bin /sbin /lib /lib64 $MOUNT_POINT
-sudo cp -a /usr/bin /usr/sbin /usr/lib /usr/lib64 $MOUNT_POINT
-sudo cp -a /etc $MOUNT_POINT
+sudo rsync -a /bin/ $MOUNT_POINT/bin/
+sudo rsync -a /sbin/ $MOUNT_POINT/sbin/
+sudo rsync -a /lib/ $MOUNT_POINT/lib/
+sudo rsync -a /lib64/ $MOUNT_POINT/lib64/
+sudo rsync -a /usr/bin/ $MOUNT_POINT/usr/bin/
+sudo rsync -a /usr/sbin/ $MOUNT_POINT/usr/sbin/
+sudo rsync -a /usr/lib/ $MOUNT_POINT/usr/lib/
+sudo rsync -a /usr/lib64/ $MOUNT_POINT/usr/lib64/
+sudo rsync -a /etc/ $MOUNT_POINT/etc/
 
 echo "Excluding specific large directories from copy..."
 # Example of excluding large directories (customize as needed)

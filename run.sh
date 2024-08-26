@@ -31,8 +31,10 @@ mount --bind /dev $MOUNT_POINT/dev
 mount --bind /proc $MOUNT_POINT/proc
 mount --bind /sys $MOUNT_POINT/sys
 
+# Create /etc/resolv.conf and add nameserver
+echo "Configuring DNS..."
+echo "nameserver 8.8.8.8" > $MOUNT_POINT/etc/resolv.conf
+
 # Chroot into the Alpine environment
 echo "Entering Alpine environment..."
-chroot $MOUNT_POINT /bin/sh
-
-# Note: Cleanup commands have been removed to keep the shell open
+chroot /mnt/alpine /bin/sh -c "apk update && apk add curl"

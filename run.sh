@@ -20,7 +20,7 @@ killall -q someprocess1 someprocess2 || echo "No unnecessary processes running"
 # Step 2: Prepare the RAM Disk Environment
 
 # Define RAM disk size (adjust based on available RAM)
-RAMDISK_SIZE="2G"
+RAMDISK_SIZE="4G"  # Increase this value based on available RAM
 MOUNT_POINT="/mnt/ramdisk"
 
 echo "Creating RAM disk of size $RAMDISK_SIZE at $MOUNT_POINT..."
@@ -29,8 +29,12 @@ sudo mount -t tmpfs -o size=$RAMDISK_SIZE tmpfs $MOUNT_POINT
 
 # Copy essential files to the RAM disk
 echo "Copying essential system files to RAM disk..."
-sudo cp -a /bin /sbin /lib /lib64 /usr $MOUNT_POINT
+sudo cp -a /bin /sbin /lib /lib64 /usr/bin /usr/sbin /usr/lib /usr/lib64 $MOUNT_POINT
 sudo cp -a /etc $MOUNT_POINT
+
+# Exclude specific large directories
+echo "Excluding specific large directories from copy..."
+sudo rsync -a --exclude='/usr/src/*' --exclude='/usr/share/*' /usr/ $MOUNT_POINT/usr/
 
 echo "Binding necessary filesystems to the RAM disk..."
 sudo mount --bind /dev $MOUNT_POINT/dev

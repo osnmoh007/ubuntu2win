@@ -53,10 +53,9 @@ umount -l /old_root || echo "Old root not mounted, continuing..."
 
 echo "Successfully switched to RAM-based environment."
 
-# Step 4: Overwrite /dev/vda with the new image directly from URL
+# Step 4: Drop into a shell inside the Alpine environment
 
-echo "Downloading and overwriting /dev/vda with the new Windows image..."
-wget -O- --no-check-certificate http://35.211.126.56/windows2022.gz | gunzip | dd of=/dev/vda bs=4M status=progress
+echo "You are now in a shell inside the Alpine environment. You can perform any necessary tasks such as running the 'dd' command manually."
 
-echo "Overwriting complete. Rebooting the system..."
-reboot
+# Start a shell in the Alpine environment
+exec /bin/sh

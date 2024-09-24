@@ -37,4 +37,4 @@ echo "nameserver 8.8.8.8" > $MOUNT_POINT/etc/resolv.conf
 
 # Chroot into the Alpine environment
 echo "Entering Alpine environment..."
-chroot /mnt/alpine /bin/sh -c "apk update && apk add curl"
+chroot /mnt/alpine /bin/sh -c "apk update && apk add curl util-linux wget aria2"

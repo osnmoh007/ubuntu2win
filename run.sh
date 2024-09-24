@@ -4,7 +4,7 @@
 ALPINE_IMAGE_URL="https://dl-cdn.alpinelinux.org/alpine/v3.17/releases/x86_64/alpine-minirootfs-3.17.0-x86_64.tar.gz"
 ALPINE_IMAGE="alpine-minirootfs-3.17.0-x86_64.tar.gz"
 MOUNT_POINT="/mnt/alpine"
-TMPFS_SIZE="10G"
+TMPFS_SIZE="20G"
 
 # Create a mount point
 mkdir -p $MOUNT_POINT
